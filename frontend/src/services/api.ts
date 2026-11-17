@@ -36,6 +36,10 @@ async function fetchJSON<T>(url: string, options?: RequestInit): Promise<T> {
     throw new Error(errorMsg);
   }
 
+  if (!resp.headers.get("content-type")?.includes("application/json")) {
+    throw new Error("The API returned an unexpected response. Check the deployment routing and try again.");
+  }
+
   return resp.json();
 }
 

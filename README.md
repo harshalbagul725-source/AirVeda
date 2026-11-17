@@ -35,17 +35,19 @@ Captured from the running application with current Open-Meteo model data (not a 
 - AI: Google Gemini API (optional, configured only on the backend)
 - External data: Open-Meteo Air Quality, Weather, and Geocoding APIs
 - Tests: Vitest, React Testing Library, Pytest
+- Deployment: one Vercel project serving the Vite frontend and FastAPI Python Function
 
 ## Architecture
 
 ```text
-Browser (React + TypeScript)
-  └── /api requests → Vite development proxy → FastAPI
-                                        ├── Open-Meteo APIs
-                                        └── Gemini API (server-side key)
+Browser (React + TypeScript, served from frontend/dist)
+  └── same-origin /api/* → Vercel Python Function (api/index.py)
+                             └── existing FastAPI app in backend/app
+                                   ├── Open-Meteo APIs
+                                   └── Gemini API (server-side key)
 ```
 
-The browser never receives the Gemini API key. The backend validates API inputs, restricts CORS, applies rate limits to AI chat, and returns a safe service-unavailable response when live data cannot be retrieved. Air-quality results are cached briefly and labelled when served from cache.
+The browser never receives the Gemini API key. The backend validates API inputs, restricts CORS, applies rate limits to AI chat, and returns a safe service-unavailable response when live data cannot be retrieved. Air-quality results are cached briefly and labelled when served from cache. In local development, Vite proxies `/api` to FastAPI on port 8000.
 
 ## Requirements
 
@@ -81,7 +83,7 @@ Open <http://localhost:5173>. Vite proxies `/api` requests to `http://localhost:
 
 ### Environment variables
 
-Copy `backend/.env.example` to `backend/.env`. Configure `GEMINI_API_KEY` only in this backend file or in the deployment environment. Never put the key in a `VITE_*` variable or frontend source.
+For local backend development, copy `backend/.env.example` to `backend/.env`. For a root-level deployment setup, `.env.example` lists the server variables. Configure `GEMINI_API_KEY` only in a server environment or the Vercel project's Environment Variables. Never put the key in a `VITE_*` variable or frontend source.
 
 | Variable | Purpose | Default |
 |---|---|---|
@@ -92,6 +94,17 @@ Copy `backend/.env.example` to `backend/.env`. Configure `GEMINI_API_KEY` only i
 | `CACHE_TTL_SECONDS` | AQI/weather cache duration | `900` |
 | `AI_RATE_LIMIT` | AI endpoint limit | `30/minute` |
 | `API_RATE_LIMIT` | General API limit | `120/minute` |
+
+## Deploy the integrated app to Vercel
+
+This repository is configured for **one Vercel project** with the repository root (`./`) as its Root Directory:
+
+1. Import `harshalbagul725-source/AirVeda` in Vercel and set the Root Directory to `./`.
+2. The checked-in `vercel.json` selects the Other framework preset, installs the frontend dependencies, builds Vite into `frontend/dist`, exposes the existing FastAPI app through `api/index.py`, routes `/api/*` to that function, and sends frontend navigation paths to the built SPA.
+3. In the Vercel project's **Settings → Environment Variables**, add `GEMINI_API_KEY` if Gemini is desired. Optionally set `GEMINI_MODEL`, `ENVIRONMENT`, `CACHE_TTL_SECONDS`, `AI_RATE_LIMIT`, `API_RATE_LIMIT`, and `ALLOWED_ORIGINS`. Never use a `VITE_` prefix for private values.
+4. Deploy the project. Verify `/`, `/api/health`, `/api/aqi/current?city=Nagpur`, and a nested frontend route after deployment.
+
+The Python function's dependencies are listed in `api/requirements.txt` and included through the repository-root `requirements.txt`. Python is pinned to 3.12 with `.python-version`. Deployment requires only this one Vercel project; no separate backend project is needed.
 
 ## API
 
