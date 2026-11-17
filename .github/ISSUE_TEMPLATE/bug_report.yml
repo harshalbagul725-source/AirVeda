@@ -1,0 +1,36 @@
+name: Bug report
+description: Report a reproducible problem in AirVeda
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should AirVeda do?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and operating system
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy and safety
+      options:
+        - label: I have removed API keys, personal location information, and other sensitive data.
+          required: true

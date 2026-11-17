@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest an improvement for AirVeda
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: User need
+      description: What problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: considerations
+    attributes:
+      label: Accessibility, privacy, or data-source considerations
