@@ -4,9 +4,9 @@
 
 ## Validation
 
-- [ ] `cd frontend && npm test`
-- [ ] `cd frontend && npm run build`
-- [ ] `cd backend && python -m pytest`
+- [ ] `cd app/frontend && npm test`
+- [ ] `cd app/frontend && npm run build`
+- [ ] `cd app/backend && python -m pytest`
 
 ## Checklist
 

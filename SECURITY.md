@@ -11,7 +11,7 @@ Please use GitHub's private vulnerability reporting feature for this repository 
 ## Security practices
 
 - Gemini credentials belong only in the backend environment.
-- `.env` files are ignored by Git; use `backend/.env.example` as a template.
+- `.env` files are ignored by Git; use `app/backend/.env.example` as a template.
 - API request models apply size and range constraints, and AI requests are rate limited.
 - CORS allows configured origins only. Production deployments should configure the exact frontend origin.
 - External data and AI responses must not be treated as clinical advice.

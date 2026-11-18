@@ -40,9 +40,9 @@ Captured from the running application with current Open-Meteo model data (not a 
 ## Architecture
 
 ```text
-Browser (React + TypeScript, served from frontend/dist)
+Browser (React + TypeScript, served from app/frontend/dist)
   └── same-origin /api/* → Vercel Python Function (api/index.py)
-                             └── existing FastAPI app in backend/app
+                             └── existing FastAPI app in app/backend/app
                                    ├── Open-Meteo APIs
                                    └── Gemini API (server-side key)
 ```
@@ -60,7 +60,7 @@ The browser never receives the Gemini API key. The backend validates API inputs,
 ### Backend (PowerShell)
 
 ```powershell
-cd backend
+cd app/backend
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
@@ -74,7 +74,7 @@ To run from Command Prompt instead of PowerShell, activate with `.\.venv\Scripts
 ### Frontend (a second terminal)
 
 ```powershell
-cd frontend
+cd app/frontend
 npm ci
 npm run dev
 ```
@@ -83,7 +83,7 @@ Open <http://localhost:5173>. Vite proxies `/api` requests to `http://localhost:
 
 ### Environment variables
 
-For local backend development, copy `backend/.env.example` to `backend/.env`. For a root-level deployment setup, `.env.example` lists the server variables. Configure `GEMINI_API_KEY` only in a server environment or the Vercel project's Environment Variables. Never put the key in a `VITE_*` variable or frontend source.
+For local backend development, copy `app/backend/.env.example` to `app/backend/.env`. For a root-level deployment setup, `.env.example` lists the server variables. Configure `GEMINI_API_KEY` only in a server environment or the Vercel project's Environment Variables. Never put the key in a `VITE_*` variable or frontend source.
 
 | Variable | Purpose | Default |
 |---|---|---|
@@ -100,7 +100,7 @@ For local backend development, copy `backend/.env.example` to `backend/.env`. Fo
 This repository is configured for **one Vercel project** with the repository root (`./`) as its Root Directory:
 
 1. Import `harshalbagul725-source/AirVeda` in Vercel and set the Root Directory to `./`.
-2. The checked-in `vercel.json` selects the Other framework preset, installs the frontend dependencies, builds Vite into `frontend/dist`, exposes the existing FastAPI app through `api/index.py`, routes `/api/*` to that function, and sends frontend navigation paths to the built SPA.
+2. The checked-in `vercel.json` selects the Other framework preset, installs the frontend dependencies, builds Vite into `app/frontend/dist`, exposes the existing FastAPI app through `api/index.py`, routes `/api/*` to that function, and sends frontend navigation paths to the built SPA.
 3. In the Vercel project's **Settings → Environment Variables**, add `GEMINI_API_KEY` if Gemini is desired. Optionally set `GEMINI_MODEL`, `ENVIRONMENT`, `CACHE_TTL_SECONDS`, `AI_RATE_LIMIT`, `API_RATE_LIMIT`, and `ALLOWED_ORIGINS`. Never use a `VITE_` prefix for private values.
 4. Deploy the project. Verify `/`, `/api/health`, `/api/aqi/current?city=Nagpur`, and a nested frontend route after deployment.
 
@@ -131,13 +131,13 @@ Unavailable or incomplete provider data returns an error instead of a synthetic 
 
 ```powershell
 # Frontend
-cd frontend
+cd app/frontend
 npm ci
 npm test
 npm run build
 
 # Backend (separate terminal)
-cd backend
+cd app/backend
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
