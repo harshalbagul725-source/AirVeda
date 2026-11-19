@@ -264,7 +264,7 @@ async def get_air_quality(
         methodology_notes="Open-Meteo modelled concentrations are used to calculate CPCB NAQI sub-indices and a separate US EPA PM2.5 AQI. These are not ground-station measurements.",
     )
 
-    aqi_cache.set(cache_key, result, ttl=900)
+    aqi_cache.set(cache_key, result)
     return result
 
 

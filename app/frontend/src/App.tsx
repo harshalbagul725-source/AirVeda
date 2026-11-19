@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { CitySearchModal } from "./components/CitySearchModal";
@@ -25,6 +25,7 @@ export const App: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const airDataRequestId = useRef(0);
 
   useEffect(() => {
     fetchAirData(selectedCity, coords.lat, coords.lon);
@@ -36,6 +37,7 @@ export const App: React.FC = () => {
   };
 
   const fetchAirData = async (city: string, lat?: number, lon?: number) => {
+    const requestId = ++airDataRequestId.current;
     setIsLoading(true);
     setAqiData(null);
     setHistoricalData(null);
@@ -44,6 +46,8 @@ export const App: React.FC = () => {
       api.getCurrentAQI(city, lat, lon),
       api.getHistoricalAQI(city, lat, lon),
     ]);
+
+    if (requestId !== airDataRequestId.current) return;
 
     const errors: string[] = [];
     if (current.status === "fulfilled") {

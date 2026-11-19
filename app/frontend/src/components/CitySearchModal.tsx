@@ -37,6 +37,7 @@ export const CitySearchModal: React.FC<CitySearchModalProps> = ({
   const [geoLocating, setGeoLocating] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchRequestId = useRef(0);
 
   useEffect(() => {
     if (isOpen) {
@@ -56,6 +57,7 @@ export const CitySearchModal: React.FC<CitySearchModalProps> = ({
   }, [isOpen, onClose]);
 
   useEffect(() => {
+    const requestId = ++searchRequestId.current;
     if (!searchTerm.trim()) {
       setResults([]);
       setIsSearching(false);
@@ -66,15 +68,19 @@ export const CitySearchModal: React.FC<CitySearchModalProps> = ({
       setIsSearching(true);
       try {
         const data = await api.searchCities(searchTerm);
+        if (requestId !== searchRequestId.current) return;
         setResults(data);
       } catch {
+        if (requestId !== searchRequestId.current) return;
         // filter locally
         const filtered = FEATURED_CITIES.filter((c) =>
           c.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setResults(filtered);
       } finally {
-        setIsSearching(false);
+        if (requestId === searchRequestId.current) {
+          setIsSearching(false);
+        }
       }
     }, 250);
 

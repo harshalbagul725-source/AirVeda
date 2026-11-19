@@ -1,6 +1,8 @@
 import time
 from typing import Any, Optional, Dict, Tuple
 
+from app.config import settings
+
 
 class SimpleAsyncCache:
     """In-memory TTL cache for API responses."""
@@ -32,6 +34,6 @@ class SimpleAsyncCache:
 
 
 # Global cache instances
-aqi_cache = SimpleAsyncCache(default_ttl=900)  # 15 minutes
+aqi_cache = SimpleAsyncCache(default_ttl=settings.CACHE_TTL_SECONDS)
 geo_cache = SimpleAsyncCache(default_ttl=86400)  # 24 hours for city geocodes
 
