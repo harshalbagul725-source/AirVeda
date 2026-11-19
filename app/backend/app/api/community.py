@@ -57,6 +57,6 @@ COMMUNITY_CHALLENGES: List[CommunityChallenge] = [
 
 
 @router.get("/challenges", response_model=List[CommunityChallenge])
-async def get_community_challenges():
+async def get_community_challenges() -> List[CommunityChallenge]:
     """Return self-guided community actions; participation and outcomes are not tracked."""
     return COMMUNITY_CHALLENGES

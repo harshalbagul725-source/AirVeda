@@ -166,3 +166,38 @@ export interface CommunityChallenge {
   impact_summary: string;
 }
 
+export interface VentilationAdvice {
+  window_action: string;
+  recommended_window: string;
+  hepa_speed: string;
+  summary: string;
+}
+
+export type AQIBreakpoint = [number, number, number, number];
+
+export interface MethodologyResponse {
+  title: string;
+  primary_standard: {
+    name: string;
+    authority: string;
+    year_established: number;
+    rule: string;
+    formula: string;
+    categories: {
+      range: string;
+      category: string;
+      color: string;
+      health_statement: string;
+    }[];
+    breakpoints: Record<string, AQIBreakpoint[]>;
+  };
+  comparative_standard: {
+    name: string;
+    authority: string;
+    guideline: string;
+    breakpoints: AQIBreakpoint[];
+    key_difference: string;
+  };
+  data_sources: string[];
+}
+

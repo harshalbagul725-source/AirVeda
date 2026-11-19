@@ -1,6 +1,5 @@
 """Build general exposure guidance adapted to current AQI category and persona."""
 
-from typing import List, Dict, Any
 from app.schemas.planner import (
     RoutineRequest,
     RoutineResponse,

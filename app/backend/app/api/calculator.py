@@ -6,7 +6,7 @@ router = APIRouter(prefix="/calculator", tags=["Eco Impact Calculator"])
 
 
 @router.post("/eco-impact", response_model=EcoImpactResponse)
-async def calculate_impact_endpoint(payload: EcoImpactRequest):
+async def calculate_impact_endpoint(payload: EcoImpactRequest) -> EcoImpactResponse:
     """
     Calculate carbon emissions avoided, equivalent trees planted,
     and fuel expenses saved when choosing lower-emission commutes.

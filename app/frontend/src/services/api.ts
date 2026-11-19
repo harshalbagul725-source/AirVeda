@@ -7,6 +7,8 @@ import {
   EcoImpactResponse,
   ChecklistItem,
   CommunityChallenge,
+  MethodologyResponse,
+  VentilationAdvice,
 } from "../types";
 
 const API_BASE = "/api";
@@ -67,8 +69,8 @@ export const api = {
     return fetchJSON<CitySearchItem[]>(`${API_BASE}/aqi/cities?${params.toString()}`);
   },
 
-  async getMethodology(): Promise<any> {
-    return fetchJSON<any>(`${API_BASE}/aqi/methodology`);
+  async getMethodology(): Promise<MethodologyResponse> {
+    return fetchJSON<MethodologyResponse>(`${API_BASE}/aqi/methodology`);
   },
 
   async sendChatMessage(payload: {
@@ -122,8 +124,8 @@ export const api = {
     return fetchJSON<ChecklistItem[]>(`${API_BASE}/indoor/checklist`);
   },
 
-  async getVentilationAdvice(aqi: number = 150): Promise<any> {
-    return fetchJSON<any>(`${API_BASE}/indoor/ventilation-advice?aqi=${aqi}`);
+  async getVentilationAdvice(aqi: number = 150): Promise<VentilationAdvice> {
+    return fetchJSON<VentilationAdvice>(`${API_BASE}/indoor/ventilation-advice?aqi=${aqi}`);
   },
 
   async getCommunityChallenges(): Promise<CommunityChallenge[]> {

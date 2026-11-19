@@ -6,7 +6,6 @@ with a robust fallback expert engine when API key is unset or calls fail.
 
 import datetime
 import logging
-from typing import List, Dict, Optional, Any
 import httpx
 from app.config import settings
 from app.schemas.ai import ChatRequest, ChatResponse, Message

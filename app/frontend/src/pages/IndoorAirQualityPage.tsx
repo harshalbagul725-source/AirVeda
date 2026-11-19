@@ -6,7 +6,7 @@ import {
   CheckSquare,
   Square,
 } from "lucide-react";
-import { AQIDataResponse, ChecklistItem } from "../types";
+import { AQIDataResponse, ChecklistItem, VentilationAdvice } from "../types";
 import { api } from "../services/api";
 
 interface IndoorAirQualityPageProps {
@@ -15,7 +15,7 @@ interface IndoorAirQualityPageProps {
 
 export const IndoorAirQualityPage: React.FC<IndoorAirQualityPageProps> = ({ aqiData }) => {
   const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
-  const [ventilationAdvice, setVentilationAdvice] = useState<any>(null);
+  const [ventilationAdvice, setVentilationAdvice] = useState<VentilationAdvice | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

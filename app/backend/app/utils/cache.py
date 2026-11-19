@@ -3,8 +3,8 @@ from typing import Any, Optional, Dict, Tuple
 
 
 class SimpleAsyncCache:
-    """In-memory thread-safe TTL cache for API responses."""
-    def __init__(self, default_ttl: int = 900):
+    """In-memory TTL cache for API responses."""
+    def __init__(self, default_ttl: int = 900) -> None:
         self._cache: Dict[str, Tuple[Any, float]] = {}
         self.default_ttl = default_ttl
 

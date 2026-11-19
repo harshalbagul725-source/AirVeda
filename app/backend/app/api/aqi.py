@@ -1,6 +1,6 @@
 import math
 import logging
-from typing import Optional, List, Dict, Any
+from typing import Optional, List
 from fastapi import APIRouter, Query, HTTPException, status
 from app.schemas.aqi import (
     AQIDataResponse,
@@ -44,7 +44,7 @@ async def get_current_aqi(
     city: str = Query("Nagpur", min_length=1, max_length=100, description="City name to query"),
     lat: Optional[float] = Query(None, ge=-90.0, le=90.0, description="Optional latitude for precise geolocated querying"),
     lon: Optional[float] = Query(None, ge=-180.0, le=180.0, description="Optional longitude for precise geolocated querying"),
-):
+) -> AQIDataResponse:
     """
     Get live air quality, weather, pollutant breakdown, and health risk advisories.
     Uses CPCB NAQI (India) as primary standard and US EPA AQI for comparison.
@@ -68,7 +68,7 @@ async def get_historical_aqi(
     city: str = Query("Nagpur", min_length=1, max_length=100, description="City name"),
     lat: Optional[float] = Query(None, ge=-90.0, le=90.0, description="Latitude"),
     lon: Optional[float] = Query(None, ge=-180.0, le=180.0, description="Longitude"),
-):
+) -> HistoricalDataResponse:
     """
     Get 24-hour hourly trend of AQI, PM2.5, PM10, and weather variables.
     """
@@ -89,7 +89,7 @@ async def get_historical_aqi(
 @router.get("/cities", response_model=List[CitySearchItem])
 async def search_cities_endpoint(
     q: str = Query("", max_length=100, description="Search term for city"),
-):
+) -> List[CitySearchItem]:
     """
     Search cities for autocomplete. Pre-loaded with prominent Indian cities.
     """

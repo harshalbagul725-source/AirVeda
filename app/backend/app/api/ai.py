@@ -1,4 +1,5 @@
-from typing import List
+import logging
+
 from fastapi import APIRouter, Request, HTTPException
 from app.schemas.ai import ChatRequest, ChatResponse
 from app.services.gemini_service import chat_with_assistant
@@ -6,6 +7,7 @@ from app.utils.rate_limiter import limiter
 from app.config import settings
 
 router = APIRouter(prefix="/ai", tags=["AI Smart Pollution Assistant"])
+logger = logging.getLogger(__name__)
 
 SUGGESTED_QUESTIONS = [
     {
@@ -48,7 +50,7 @@ SUGGESTED_QUESTIONS = [
 
 @router.post("/chat", response_model=ChatResponse)
 @limiter.limit(settings.AI_RATE_LIMIT)
-async def chat_endpoint(request: Request, payload: ChatRequest):
+async def chat_endpoint(request: Request, payload: ChatRequest) -> ChatResponse:
     """
     Intelligent conversational endpoint powered by Google Gemini API
     with fallback to expert environmental intelligence.
@@ -57,6 +59,7 @@ async def chat_endpoint(request: Request, payload: ChatRequest):
         response = await chat_with_assistant(payload)
         return response
     except Exception:
+        logger.exception("AI chat request failed")
         raise HTTPException(
             status_code=500,
             detail="The AI assistant is temporarily unavailable. Please try again shortly.",

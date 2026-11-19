@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List
 from fastapi import APIRouter
 from pydantic import BaseModel
 
@@ -75,7 +75,7 @@ DEFAULT_CHECKLIST: List[ChecklistItem] = [
 
 
 @router.get("/checklist", response_model=List[ChecklistItem])
-async def get_indoor_checklist():
+async def get_indoor_checklist() -> List[ChecklistItem]:
     """Retrieve the recommended indoor air safety checklist items."""
     return DEFAULT_CHECKLIST
 
